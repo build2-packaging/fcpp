@@ -1,0 +1,23 @@
+--- fpp.h.orig	2026-09-27 15:17:57
++++ fpp.h	2026-09-27 15:20:52
+@@ -156,4 +156,20 @@
+ /* Switch on WWW-mode */
+ #define FPPTAG_WEBMODE 33
+ 
++/* Whether to output the version information string. This is the same tag as
++   FPPTAG_IGNOREVERSION, whose data is handled as "show" (default is TRUE). */
++#define FPPTAG_SHOWVERSION FPPTAG_IGNOREVERSION
++
++/* Depends function, called with the name of each opened #include file: */
++#define FPPTAG_DEPENDS 34 /* data is function pointer to a
++                             "void (*)(char *, void *)" */
++
++/* The AmigaOS shared library build defines these (see cppdef.h). */
++#ifndef PREFIX
++#define PREFIX
++#endif
++#ifndef REG
++#define REG(x)
++#endif
++
+ int PREFIX fppPreProcess(REG(a0) struct fppTag *);
