@@ -1,0 +1,22 @@
+--- cpp3.c.orig	2026-09-27 15:17:57
++++ cpp3.c	2026-09-27 15:21:19
+@@ -39,6 +39,9 @@
+     ret=FPP_OPEN_ERROR;
+   else
+     ret=addfile(global, fp, filename);
++
++  if(!ret && global->depends)
++    global->depends(filename, global->userdata);
+ 
+   if(!ret && global->showincluded) {
+     /* no error occurred! */
+@@ -255,6 +258,9 @@
+     case FPPTAG_EXCLFUNC:
+       global->excludedinit[ global->excluded++ ] = (char *)tags->data;
+       break;
++    case FPPTAG_DEPENDS:
++      global->depends=(void (*)(char *, void *))tags->data;
++      break;
+     case FPPTAG_WEBMODE:
+       global->webmode=(tags->data?1:0);
+       break;
