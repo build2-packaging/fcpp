@@ -1,0 +1,39 @@
+--- cpp1.c.orig	2026-09-27 15:17:57
++++ cpp1.c	2026-09-27 15:21:19
+@@ -104,6 +104,7 @@
+   global->error=NULL;
+   global->first_file=NULL;
+   global->userdata=NULL;
++  global->depends=NULL;
+ 
+   global->linelines=TRUE;
+   global->warnillegalcpp = FALSE;
+@@ -142,7 +143,8 @@
+ #endif
+   }
+   fflush(stdout);
+-  fclose(stdout);
++  if(!global->output)   /* Library use: the caller owns stdout */
++    fclose(stdout);
+ 
+   if (global->errors > 0 && !global->eflag)
+     return(IO_ERROR);
+@@ -311,7 +313,7 @@
+         }
+         if((ret=macroid(global, &c))!=0)   /* Grab the token       */
+           return(ret);
+-      } while (type[c] == LET && catenate(global, &ret) && !ret);
++      } while (type[c] == LET && catenate(global, 0, &ret) && !ret);
+       if(ret)
+         /* If the loop was broken because of a fatal error! */
+         return(ret);
+@@ -335,6 +337,9 @@
+       case DOT:                 /* Dot may begin floats */
+         go = 0;
+         ret=scannumber(global, c, (ReturnCode(*)(struct Global *, int))output);
++        if(ret)
++          return(ret);
++        catenate(global, 1, &ret); /* Number may be the lhs of a ## concat */
+         if(ret)
+           return(ret);
+         break;
