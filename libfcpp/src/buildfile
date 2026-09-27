@@ -31,6 +31,10 @@ c.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
 #
 c.poptions += -DUNIX
 
+c.poptions += "-DNBUFF=$config.libfcpp.nbuff" \
+              "-DNWORK=$config.libfcpp.nwork" \
+              "-DNINCLUDE=$config.libfcpp.ninclude"
+
 # Only fppPreProcess() is public (see fpp.h). Keep the implementation's
 # global helpers, which have generic names such as get(), save(), and type[],
 # out of the shared library's exported symbols.

@@ -4,6 +4,14 @@
 
 using c
 
+# Sizes of the input line buffer, the work buffer (limits the length of a
+# macro definition or expansion), and the include directory table (see
+# cppdef.h). The defaults are upstream's.
+#
+config [uint64] config.libfcpp.nbuff ?= 4096
+config [uint64] config.libfcpp.nwork ?= 2048
+config [uint64] config.libfcpp.ninclude ?= 20
+
 h{*}: extension = h
 c{*}: extension = c
 
