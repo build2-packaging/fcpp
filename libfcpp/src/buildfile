@@ -10,11 +10,11 @@ include $pub
 
 pub_hdrs = $($pub/ pub_hdrs)
 
-lib{fcpp}: $pub/{$pub_hdrs}
+lib{fpp}: $pub/{$pub_hdrs}
 
 # Private headers and sources as well as dependencies.
 #
-lib{fcpp}: {h c}{**} $impl_libs $intf_libs
+lib{fpp}: {h c}{**} $impl_libs $intf_libs
 
 # Build options.
 #
@@ -26,28 +26,45 @@ src_pfx_src = [dir_path] $src_root/src/
 c.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
               "-I$out_pfx_inc" "-I$src_pfx_inc"
 
+# Use the standard C library fallbacks (stdout, stderr) when the caller sets
+# no output or error function (the alternative is the AmigaOS build).
+#
+c.poptions += -DUNIX
+
+# Only fppPreProcess() is public (see fpp.h). Keep the implementation's
+# global helpers, which have generic names such as get(), save(), and type[],
+# out of the shared library's exported symbols.
+#
+libs{fpp}: def{fpp}: include = ($c.target.class == 'windows')
+libs{fpp}: file{fpp.map}: include = adhoc
+
+if ($c.target.class == 'macos')
+  libs{fpp}: c.loptions += -Wl,-exported_symbol,_fppPreProcess
+elif ($c.target.class != 'windows')
+  libs{fpp}: c.loptions += "-Wl,--version-script=$src_base/fpp.map"
+
 #obja{*}: c.poptions += -DLIBFCPP_STATIC_BUILD
 #objs{*}: c.poptions += -DLIBFCPP_SHARED_BUILD
 
 # Export options.
 #
-lib{fcpp}:
+lib{fpp}:
 {
   c.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
   c.export.libs = $intf_libs
 }
 
-#liba{fcpp}: c.export.poptions += -DLIBFCPP_STATIC
-#libs{fcpp}: c.export.poptions += -DLIBFCPP_SHARED
+#liba{fpp}: c.export.poptions += -DLIBFCPP_STATIC
+#libs{fpp}: c.export.poptions += -DLIBFCPP_SHARED
 
 # For pre-releases use the complete version to make sure they cannot
 # be used in place of another pre-release or the final version. See
 # the version module for details on the version.* variable values.
 #
 if $version.pre_release
-  lib{fcpp}: bin.lib.version = "-$version.project_id"
+  lib{fpp}: bin.lib.version = "-$version.project_id"
 else
-  lib{fcpp}: bin.lib.version = "-$version.major.$version.minor"
+  lib{fpp}: bin.lib.version = "-$version.major.$version.minor"
 
 # Don't install private headers.
 #

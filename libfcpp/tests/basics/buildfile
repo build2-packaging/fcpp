@@ -1,3 +1,3 @@
-import libs = libfcpp%lib{fcpp}
+import libs = libfcpp%lib{fpp}
 
 exe{driver}: {h c}{**} $libs testscript{**}
