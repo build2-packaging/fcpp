@@ -1,0 +1,19 @@
+--- cppadd.h.orig	2026-09-27 15:17:57
++++ cppadd.h	2026-09-27 15:21:19
+@@ -204,6 +204,7 @@
+   char *first_file;             /* Preprocessed file. */
+ 
+   void *userdata;               /* Data sent to input function */
++  void (*depends)(char *, void *); /* Called for each included file */
+ 
+   void (*output)(int, void *);  /* output function */
+ 
+@@ -372,7 +373,7 @@
+ void Putint(struct Global *, int);
+ char *savestring(struct Global *, char *);
+ ReturnCode addfile(struct Global *, FILE *, char *);
+-int catenate(struct Global *, ReturnCode *);
++int catenate(struct Global *, int lhs_number, ReturnCode *);
+ void cerror(struct Global *, ErrorCode, ...);
+ ReturnCode control(struct Global *, int *);
+ ReturnCode dodefine(struct Global *);
