@@ -7,3 +7,13 @@ out_pfx = [dir_path] $out_root/fcpp/
 src_pfx = [dir_path] $src_root/fcpp/
 
 c.poptions =+ "-I$out_pfx" "-I$src_pfx"
+
+# Upstream uses fopen(), freopen(), and getenv(), which MSVC deprecates.
+#
+if ($c.target.system == 'win32-msvc')
+  c.poptions += -D_CRT_SECURE_NO_WARNINGS
+
+# Upstream ignores fread()'s return value in GetPrefs() (fortify builds warn).
+#
+if ($c.id == 'gcc')
+  c.coptions += -Wno-unused-result
