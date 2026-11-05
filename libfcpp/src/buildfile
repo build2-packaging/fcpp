@@ -35,6 +35,26 @@ c.poptions += "-DNBUFF=$config.libfcpp.nbuff" \
               "-DNWORK=$config.libfcpp.nwork" \
               "-DNINCLUDE=$config.libfcpp.ninclude"
 
+# Upstream uses fopen(), strcpy(), strncpy(), and localtime(), which MSVC
+# deprecates.
+#
+if ($c.target.system == 'win32-msvc')
+  c.poptions += -D_CRT_SECURE_NO_WARNINGS
+
+# Upstream assigns size_t (strlen) and __int64 (ftell) to int without casts.
+#
+if ($c.class == 'msvc')
+  c.coptions += /wd4267 /wd4244
+
+# Upstream leaves locals set but unused (cpp3.c) and may-be-uninitialized
+# (cpp5.c, cpp6.c). GCC also reports -Wformat-overflow on the length-checked
+# sprintf in cpp2.c because it cannot prove the bound.
+#
+if ($c.id == 'gcc')
+  c.coptions += -Wno-unused-but-set-variable \
+                -Wno-maybe-uninitialized \
+                -Wno-format-overflow
+
 # Only fppPreProcess() is public (see fpp.h). Keep the implementation's
 # global helpers, which have generic names such as get(), save(), and type[],
 # out of the shared library's exported symbols.
