@@ -1,0 +1,11 @@
+--- cpp2.c.orig	2026-11-03 23:15:41.097884268 +0100
++++ cpp2.c	2026-11-05 17:26:40.308029350 +0100
+@@ -670,7 +670,7 @@
+         {
+         len = strlen(*incptr);
+ 
+-        if( len + strlen(filename) >= sizeof(tmpname) )
++        if( len + 1 + strlen(filename) >= sizeof(tmpname) )
+             {
+             cfatal( global, FATAL_FILENAME_BUFFER_OVERFLOW );
+ 
