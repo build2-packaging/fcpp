@@ -1,0 +1,6 @@
+: basics
+:
+$* -V -LL <<EOI >'Hello'
+#define GREETING Hello
+GREETING
+EOI

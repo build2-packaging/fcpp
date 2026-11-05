@@ -1,0 +1,4 @@
+import fcpp = fcpp%exe{fcpp}
+
+testscript{*}: test = $fcpp
+./: testscript $fcpp
