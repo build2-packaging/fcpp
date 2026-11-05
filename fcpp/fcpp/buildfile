@@ -1,5 +1,5 @@
 libs =
-#import libs += libhello%lib{hello}
+import libs += libfcpp%lib{fpp}
 
 exe{fcpp}: {h c}{**} $libs testscript
 

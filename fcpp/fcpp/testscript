@@ -1,9 +1,20 @@
 : basics
 :
-$* 'World' >'Hello, World!'
+$* -V -LL <<EOI >'Hello'
+#define GREETING Hello
+GREETING
+EOI
 
-: missing-name
+# Upstream's main() returns -2 when it cannot open the input file. Windows
+# reports that as exit code 0xFFFFFFFE, which build2 treats as abnormal
+# termination, so only check this on other platforms.
+#
+: missing-input
 :
-$* 2>>EOE != 0
-error: missing name
-EOE
+if ($c.target.class != 'windows')
+{
+  $* 'nonexistent' 2>>:~%EOE% != 0
+  %.*nonexistent: .+%
+  Can't open input file "nonexistent"
+  EOE
+}
