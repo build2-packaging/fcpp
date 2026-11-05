@@ -1,0 +1,1 @@
+./: {*/ -build/} doc{README PACKAGE-README.md} legal{COPYING} manifest

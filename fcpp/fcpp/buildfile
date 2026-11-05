@@ -1,0 +1,9 @@
+libs =
+#import libs += libhello%lib{hello}
+
+exe{fcpp}: {h c}{**} $libs testscript
+
+out_pfx = [dir_path] $out_root/fcpp/
+src_pfx = [dir_path] $src_root/fcpp/
+
+c.poptions =+ "-I$out_pfx" "-I$src_pfx"
