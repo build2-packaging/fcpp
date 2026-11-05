@@ -1,0 +1,22 @@
+--- usecpp.c.orig	2026-11-03 23:15:41.097884268 +0100
++++ usecpp.c	2026-11-05 17:26:33.952086243 +0100
+@@ -278,7 +278,7 @@
+   FILE     *PrefsFile_PF;
+   unsigned  Length_U;
+   char ret= 0;
+-  char *environ;
++  char *env;
+ 
+   *string = NULL;
+ 
+@@ -303,8 +303,8 @@
+     }
+   }
+ 
+-  if((environ = getenv("CPP_PREFS"))!=NULL) {
+-    ret= !DoString(tagptr, environ);
++  if((env = getenv("CPP_PREFS"))!=NULL) {
++    ret= !DoString(tagptr, env);
+     if(ret && *string)
+       free( *string );
+   }
