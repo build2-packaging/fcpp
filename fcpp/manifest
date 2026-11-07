@@ -1,6 +1,6 @@
 : 1
 name: fcpp
-version: 1.5.1-a.0.z
+version: 1.5.1
 language: c
 project: fcpp
 summary: Frexx C preprocessor executable
