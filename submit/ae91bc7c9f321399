@@ -1,0 +1,7 @@
+: 1
+name: fcpp
+version: 1.5.1
+language: c
+project: fcpp
+summary: Frexx C preprocessor executable
+license: BSD-3-Clause
